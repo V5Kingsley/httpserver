@@ -1,0 +1,63 @@
+1.修改了makefile，使其能debug
+
+2.ab命令 -n 执行的请求数量 -c 并发请求个数 参照https://www.cnblogs.com/ym123/archive/2015/07/08/4629735.html
+
+ab -k -r -c1000 -n1000 http://localhost:54321/index.html
+
+需要加入-r -r的作用是Don't exit on socket receive errors. 参考 https://mengkang.net/573.html
+
+输入命名后，提示apr_poll: The timeout specified has expired (70007)
+
+解决方案：在命令行中加-k 使得connection keep alive
+
+apr_socket_recv: Connection refused (111): 端口不存在或端口被占用，设置服务器端口复用
+
+pool.h:  C C++混合编译
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+void func();
+#ifdef __cplusplus
+}
+#endif
+
+
+ab test sample:
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            54321
+
+Document Path:          /index.html
+Document Length:        10444 bytes
+
+Concurrency Level:      1000
+Time taken for tests:   0.239 seconds
+Complete requests:      1000
+Failed requests:        0
+Total transferred:      10542000 bytes
+HTML transferred:       10444000 bytes
+Requests per second:    4176.81 [#/sec] (mean)
+Time per request:       239.417 [ms] (mean)
+Time per request:       0.239 [ms] (mean, across all concurrent requests)
+Transfer rate:          42999.96 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0   15  12.6     16      38
+Processing:     5   44  17.6     44     198
+Waiting:        5   43  17.5     44     197
+Total:          6   59  23.7     70     219
+
+Percentage of the requests served within a certain time (ms)
+  50%     70
+  66%     73
+  75%     75
+  80%     76
+  90%     79
+  95%     81
+  98%     82
+  99%     84
+ 100%    219 (longest request)
+
