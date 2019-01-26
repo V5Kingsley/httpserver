@@ -108,7 +108,9 @@ void sys_tick_handle(struct list_head *  head)
 void over_time_handle(void * arg_fd)
 {
 	int fd = *(int*)arg_fd;
+#if KINGDEBUG
 	printf("close fd %d", fd);
+#endif
 	close(fd);
 	timers[fd] = NULL;
 }
